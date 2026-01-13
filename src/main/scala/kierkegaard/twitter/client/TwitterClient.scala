@@ -2,8 +2,6 @@ package kierkegaard.twitter.client
 
 import sttp.client3._
 import sttp.client3.circe._
-import io.circe._
-import io.circe.parser._
 import io.circe.generic.auto._
 import scala.util.Try
 
@@ -13,8 +11,6 @@ class TwitterClient(accessToken: String) {
   
   sealed trait TwitterError
   case class PostError(message: String) extends TwitterError
-  case class RateLimitError(resetTime: String) extends TwitterError
-  case class ParseError(message: String) extends TwitterError
   case class HttpError(statusCode: Int, body: String) extends TwitterError
   
   def tweet(message: String): Either[TwitterError, TweetResponse] = {
