@@ -18,6 +18,9 @@ COPY eitheror.epub papers_and_journals selections.txt ./
 
 RUN sbt compile
 
+# Build quotes database
+RUN sbt "run --build-quotes"
+
 # Runtime stage
 FROM eclipse-temurin:21-jre
 
@@ -33,7 +36,8 @@ COPY --from=builder /app /app
 COPY --from=builder /root/.sbt /root/.sbt
 COPY --from=builder /root/.cache /root/.cache
 
-RUN mkdir -p /app/data
+# Copy pre-built quotes database
+COPY --from=builder /app/data /app/data
 
 EXPOSE 8080
 

@@ -96,8 +96,9 @@ object DaemonServer {
   }
   
   private def runHttpServer(port: Int, password: String, client: TwitterClient): Unit = {
-    val serverSocket = new ServerSocket(port)
-    log(s"HTTP server listening on port $port")
+    val serverSocket = new ServerSocket()
+    serverSocket.bind(new InetSocketAddress("0.0.0.0", port))
+    log(s"HTTP server listening on 0.0.0.0:$port")
     
     while (true) {
       try {
