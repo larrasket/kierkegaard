@@ -1,0 +1,54 @@
+# Scala & SBT
+target/
+project/target/
+project/project/
+.bsp/
+.metals/
+.bloop/
+metals.sbt
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Credentials & Secrets
+.env
+twitter_tokens.txt
+access_tokens.txt
+# Note: application.conf contains credentials - DO NOT commit to public repos
+
+# OS
+.DS_Store
+*.swp
+*.swo
+*~
+target/
+project/target/
+project/project/
+.bsp/
+.metals/
+.bloop/
+metals.sbt
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Credentials & Secrets
+.env
+twitter_tokens.txt
+access_tokens.txt
+# Note: application.conf contains credentials - DO NOT commit to public repos
+
+# OS
+.DS_Store
+*.swp
+*.swo
+*~
+/src/main/resources/application.conf

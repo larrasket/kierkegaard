@@ -1,0 +1,17 @@
+twitter {
+  consumer {
+    key = "YOUR_CONSUMER_KEY"
+    key = ${?TWITTER_CONSUMER_KEY}
+    
+    secret = "YOUR_CONSUMER_SECRET"
+    secret = ${?TWITTER_CONSUMER_SECRET}
+  }
+  
+  access {
+    token = "YOUR_ACCESS_TOKEN"
+    token = ${?TWITTER_ACCESS_TOKEN}
+    
+    tokenSecret = "YOUR_ACCESS_TOKEN_SECRET"
+    tokenSecret = ${?TWITTER_ACCESS_TOKEN_SECRET}
+  }
+}

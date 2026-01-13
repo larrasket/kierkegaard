@@ -1,0 +1,20 @@
+0 0 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 1 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 2 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 4 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 6 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 8 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 10 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 12 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 14 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 16 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 17 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 18 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 19 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 20 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+0 22 * * * cd $PROJECT_DIR && sbt "run --post-one" >> /tmp/kierkegaard.log 2>&1
+
+# logs:
+# tail -f /tmp/kierkegaard.log
+# check status:
+# sbt "run --stats"
