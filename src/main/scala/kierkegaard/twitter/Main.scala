@@ -3,6 +3,7 @@ package kierkegaard.twitter
 import kierkegaard.twitter.auth._
 import kierkegaard.twitter.client.TwitterClient
 import kierkegaard.twitter.quotes.QuoteDatabase
+import kierkegaard.twitter.daemon.DaemonServer
 import scala.io.StdIn
 import java.net.ServerSocket
 import java.io.{BufferedReader, InputStreamReader, PrintWriter}
@@ -11,7 +12,8 @@ import java.io.{BufferedReader, InputStreamReader, PrintWriter}
  *   sbt "run --build-quotes" 
  *   sbt "run --post-one"     
  *   sbt "run --dry-run"      
- *   sbt "run --stats"        
+ *   sbt "run --stats"
+ *   sbt "run --daemon"       
  */
 object Main extends App {
   
@@ -22,7 +24,14 @@ object Main extends App {
     case "--post-one" => postOneQuote()
     case "--dry-run" => dryRun()
     case "--stats" => showStats()
+    case "--daemon" => runDaemon()
     case "--interactive" | _ => interactive()
+  }
+  
+  def runDaemon(): Unit = {
+    val port = sys.env.getOrElse("PORT", "8080").toInt
+    val password = sys.env.getOrElse("FORCE_POST_PASSWORD", "kierkegaard")
+    DaemonServer.run(port, password)
   }
   
   def buildQuotes(): Unit = {
