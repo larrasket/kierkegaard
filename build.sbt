@@ -38,3 +38,13 @@ scalacOptions ++= Seq(
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard"
 )
+
+// Assembly settings for fat JAR
+assembly / mainClass := Some("kierkegaard.twitter.Main")
+assembly / assemblyJarName := "kierkegaard-bot.jar"
+
+assembly / assemblyMergeStrategy := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case "reference.conf" => MergeStrategy.concat
+  case x => MergeStrategy.first
+}

@@ -168,7 +168,31 @@ object Main extends App {
           
           case Some(tokens) =>
             println("Access tokens found. Authenticating...\n")
-            runAuthenticated(tokens.accessToken)
+            // Try to use existing token, if it fails try refresh, if that fails re-auth
+            val client = TwitterClient(tokens.accessToken)
+            client.getAccountInfo match {
+              case Right((username, name)) =>
+                println(s" Authenticated as: @$username ($name)\n")
+                showMenu(client)
+              case Left(_) =>
+                // Try refresh token if available
+                tokens.refreshToken match {
+                  case Some(refresh) =>
+                    println("Access token expired, attempting refresh...\n")
+                    TwitterAuth.refreshAccessToken(credentials.oauth2, refresh) match {
+                      case Right(tokenResp) =>
+                        println("Token refreshed successfully!\n")
+                        TwitterCredentials.saveAccessTokens(tokenResp.access_token, tokenResp.refresh_token)
+                        runAuthenticated(tokenResp.access_token)
+                      case Left(_) =>
+                        println("Refresh failed. Starting OAuth 2.0 flow...\n")
+                        runOAuth2Flow(credentials.oauth2)
+                    }
+                  case None =>
+                    println("Access token expired and no refresh token. Starting OAuth 2.0 flow...\n")
+                    runOAuth2Flow(credentials.oauth2)
+                }
+            }
         }
     }
   }

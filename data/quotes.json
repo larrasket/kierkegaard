@@ -4,15 +4,15 @@
       "text" : "The very moment our knight resigned himself he made\nsure of the absolute impossibility, in any human sense, of his\nlove.",
       "score" : 81,
       "source" : "selections",
-      "posted" : false,
-      "postedAt" : null
+      "posted" : true,
+      "postedAt" : "2026-01-13T14:58:26.765996Z"
     },
     {
       "text" : "All your passionate energy now awakens; reflection with its hundred arms grasps the thought of being a priest.",
       "score" : 77,
       "source" : "eitheror",
-      "posted" : false,
-      "postedAt" : null
+      "posted" : true,
+      "postedAt" : "2026-01-13T15:00:15.305091Z"
     },
     {
       "text" : "One moment they preach to you not to go about half asleep but live your life with the highest passion of the infinite.",
@@ -108186,5 +108186,5 @@
       "postedAt" : null
     }
   ],
-  "lastUpdated" : "2026-01-13T13:18:58.752824Z"
+  "lastUpdated" : "2026-01-13T15:00:15.320321Z"
 }

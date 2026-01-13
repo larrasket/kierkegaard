@@ -47,20 +47,22 @@ object TwitterCredentials {
       val configPath = Paths.get("src/main/resources/application.conf")
       val content = new String(Files.readAllBytes(configPath), StandardCharsets.UTF_8)
       
+      // Replace accessToken = "anything" with the new token
       val withAccessToken = content.replaceFirst(
-        """accessToken = ""[^"]*"""",
-        s"""accessToken = "$accessToken""""
+        """(accessToken = )"[^"]*"""",
+        s"""$$1"$accessToken""""
       )
       
       val updated = refreshToken match {
         case Some(refresh) => withAccessToken.replaceFirst(
-          """refreshToken = ""[^"]*"""",
-          s"""refreshToken = "$refresh""""
+          """(refreshToken = )"[^"]*"""",
+          s"""$$1"$refresh""""
         )
         case None => withAccessToken
       }
       
       Files.write(configPath, updated.getBytes(StandardCharsets.UTF_8))
+      println(s"Tokens written to $configPath")
       ()
     }.toEither.left.map(_.getMessage)
   }
