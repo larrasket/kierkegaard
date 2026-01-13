@@ -260,9 +260,50 @@ object DaemonServer {
         s"HTTP/1.1 401 Unauthorized\r\nContent-Type: application/json\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n$body"
       }
       
+    } else if (requestLine.contains("/skip")) {
+      // Skip endpoint: try to post, if fails return quote and mark as posted anyway
+      val hasPassword = requestLine.contains(s"password=$password")
+      
+      if (hasPassword) {
+        log("Skip/post triggered via HTTP")
+        QuoteDatabase.load() match {
+          case Left(err) =>
+            val body = s"""{"error":"$err"}"""
+            s"HTTP/1.1 500 Internal Server Error\r\nContent-Type: application/json\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n$body"
+          case Right(db) =>
+            QuoteDatabase.getNextQuote(db) match {
+              case None =>
+                val body = """{"error":"No unposted quotes"}"""
+                s"HTTP/1.1 404 Not Found\r\nContent-Type: application/json\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n$body"
+              case Some(quote) =>
+                // Try to post
+                val postResult = getClient().tweet(quote.text)
+                
+                // Always mark as posted
+                val updated = QuoteDatabase.markAsPosted(db, quote.text)
+                QuoteDatabase.save(updated)
+                
+                postResult match {
+                  case Right(resp) =>
+                    log(s"Posted: ${quote.text.take(50)}...")
+                    val body = s"""{"status":"posted","id":"${resp.id}","text":"${quote.text.replace("\"", "'").replace("\n", " ")}","score":${quote.score},"source":"${quote.source}"}"""
+                    s"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n$body"
+                  case Left(err) =>
+                    log(s"Post failed, returning quote anyway: ${err.toString.take(50)}...")
+                    val body = s"""{"status":"skipped","reason":"${err.toString.take(100).replace("\"", "'")}","text":"${quote.text.replace("\"", "'").replace("\n", " ")}","score":${quote.score},"source":"${quote.source}"}"""
+                    s"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n$body"
+                }
+            }
+        }
+      } else {
+        val body = """{"error":"Invalid password"}"""
+        s"HTTP/1.1 401 Unauthorized\r\nContent-Type: application/json\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n$body"
+      }
+      
     } else {
-      val body = """{"error":"Unknown endpoint","endpoints":["/health","/post?password=XXX"]}"""
+      val body = """{"error":"Unknown endpoint","endpoints":["/health","/post?password=XXX","/skip?password=XXX"]}"""
       s"HTTP/1.1 404 Not Found\r\nContent-Type: application/json\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n$body"
+
     }
     
     out.write(response.getBytes("UTF-8"))
